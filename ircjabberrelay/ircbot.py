@@ -39,7 +39,7 @@ class IrcBot(irc.IRCClient):
             return
 
         if self.isUtf8(msg):
-            self.factory.callback("Private Bot Message: <%s> %s" % (user, msg.rstrip()))
+            self.factory.callback("<%s> %s" % (user, msg.rstrip()))
 
     def action(self, user, channel, msg):
         """This will get called when the bot sees someone do an action."""
