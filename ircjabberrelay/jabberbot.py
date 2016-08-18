@@ -87,3 +87,6 @@ class JabberBot(muc.MUCClient):
     def sendMessage(self, msg):
         #log.msg("jabber <- %s" % (msg))
         self.groupChat(self.room_jid, msg.decode('utf-8'))
+
+    def getXMPPUsers(self):
+        return self.getMemberList(self.room_jid)

@@ -39,7 +39,10 @@ class IrcBot(irc.IRCClient):
             return
 
         if self.isUtf8(msg):
-            self.factory.callback("<%s> %s" % (user, msg.rstrip()))
+            if msg.startswith('@who'):
+                self.factory.manager.jabberbot.getXMPPUsers().addCallback(self.printOnline)
+            else:
+                self.factory.callback("<%s> %s" % (user, msg.rstrip()))
 
     def action(self, user, channel, msg):
         """This will get called when the bot sees someone do an action."""
@@ -99,6 +102,10 @@ class IrcBot(irc.IRCClient):
 
         del self._namescallback[channel]
 
+    def printOnline(self, namelist):
+            namelist.sort()
+            msg = ' '.join(namelist)
+            sendMessage(msg.decode('utf-8'))
 
 class IrcBotFactory(protocol.ClientFactory):
     protocol = IrcBot
