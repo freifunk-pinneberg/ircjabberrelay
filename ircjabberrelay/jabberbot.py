@@ -16,13 +16,14 @@ class JabberBot(muc.MUCClient):
         self.room     = room
         self.nick     = nick
         self.callback = callback
-        self.room_jid = jid.internJID(self.room+'@'+self.server+'/'+self.nick)
+        self.room_jid = jid.internJID(self.room+'@'+self.server)
 
-    def initialized(self):
+    def connectionInitialized(self):
         """The bot has connected to the xmpp server, now try to join the room.
         """
         log.msg("Connected to server")
-        self.join(self.server, self.room, self.nick).addCallback(self.initRoom)
+        muc.MUCClient.connectionInitialized(self)
+        self.join(self.room_jid, self.nick).addCallback(self.initRoom)
 
     @defer.inlineCallbacks
     def initRoom(self, room):
