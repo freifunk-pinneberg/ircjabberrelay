@@ -1,6 +1,5 @@
 Forwards messages between IRC channel and Jabber conference.
 
 In current version it sends all messages from IRC to Jabber channel.
-And from Jabber to IRC it sends only messages that are prepended with "@toirc ".
 
 Fix it appropriately to satisfy your needs :)

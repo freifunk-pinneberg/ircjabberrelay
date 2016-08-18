@@ -9,8 +9,8 @@ class IrcBot(irc.IRCClient):
     def _get_nickname(self):
         return self.factory.nickname
     nickname = property(_get_nickname)
-    realname = "Gateway to fedora@conference.jabber.ru"
-    userinfo = "Sends all messages to jabber conference"
+    realname = self.factory.realname
+    userinfo = self.factory.userinfo
 
     def signedOn(self):
         self.join(self.factory.channel)
@@ -33,9 +33,7 @@ class IrcBot(irc.IRCClient):
             return
 
         if self.isUtf8(msg):
-            self.factory.callback("IRC: <%s> %s" % (user, msg.rstrip()))
-        else:
-            self.factory.callback("IRC (CP1251): <%s> %s" % (user, msg.decode('cp1251').encode('utf-8').rstrip()))
+            self.factory.callback("Private Bot Message: <%s> %s" % (user, msg.rstrip()))
 
     def action(self, user, channel, msg):
         """This will get called when the bot sees someone do an action."""
@@ -50,9 +48,7 @@ class IrcBot(irc.IRCClient):
             return
 
         if self.isUtf8(msg):
-            self.factory.callback("IRC: * %s %s" % (user, msg.rstrip()))
-        else:
-            self.factory.callback("IRC (CP1251): * %s %s" % (user, msg.decode('cp1251').encode('utf-8').rstrip()))
+            self.factory.callback("<%s> %s" % (user, msg.rstrip()))
 
     def sendMessage(self, msg):
         #log.msg("irc <- %s" % (msg))
@@ -101,10 +97,12 @@ class IrcBot(irc.IRCClient):
 class IrcBotFactory(protocol.ClientFactory):
     protocol = IrcBot
 
-    def __init__(self, manager, channel, nickname, callback):
+    def __init__(self, manager, channel, nickname, realname, userinfo, callback):
         self.manager = manager
         self.channel = channel
         self.nickname = nickname
+        self.realname = realname
+        self.userinfo = userinfo
         self.callback = callback
 
     def clientConnectionLost(self, connector, reason):
