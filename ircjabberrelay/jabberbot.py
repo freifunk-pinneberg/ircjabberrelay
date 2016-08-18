@@ -36,33 +36,33 @@ class JabberBot(muc.MUCClient):
             # set config default
             config_result = yield self.configure(self.room_jid.userhost())
 
-    def receivedGroupChat(self, room, user, body):
+    def receivedGroupChat(self, room, user, message):
         ismoderator = (user.role == 'moderator')
         if not user.nick.startswith(self.nick):
-            #if body.startswith('/me '):
-            #    self.callback("JABBER: * %s %s" % (user.nick, body.replace('/me ', '', 1)))
+            #if message.body.startswith('/me '):
+            #    self.callback("JABBER: * %s %s" % (user.nick, message.body.replace('/me ', '', 1)))
             #else:
 
             # send to irc only command messages
-            if body.startswith('@who'):
+            if message.body.startswith('@who'):
                 if self.manager.ircbot is not None:
                     self.manager.ircbot.names().addCallback(self.printOnline)
-            elif ismoderator and body.startswith('@ignore '):
-                nick = body.replace('@ignore ', '', 1).rstrip()
+            elif ismoderator and message.body.startswith('@ignore '):
+                nick = message.body.replace('@ignore ', '', 1).rstrip()
                 if not nick in self.manager.ignoreList:
                     self.manager.addIgnore(nick)
                     self.sendMessage("Ignoring %s" % (nick))
-            elif ismoderator and body.startswith('@unignore '):
-                nick = body.replace('@unignore ', '', 1).rstrip()
+            elif ismoderator and message.body.startswith('@unignore '):
+                nick = message.body.replace('@unignore ', '', 1).rstrip()
                 if nick in self.manager.ignoreList:
                     self.manager.removeIgnore(nick)
                     self.sendMessage("Unignoring %s" % (nick))
-            elif ismoderator and body.startswith('@ignorelist'):
+            elif ismoderator and message.body.startswith('@ignorelist'):
                 if len(self.manager.ignoreList) > 0:
                     self.sendMessage("Ignoring " + ' '.join(self.manager.ignoreList))
                 else:
-                    self.sendMessage("Not ignoring anybody")
-            elif body.startswith('@help'):
+                    self.sendMessage("Not ignoring anymessage.body")
+            elif message.body.startswith('@help'):
                 self.sendMessage('\n'.join(
                     [u"@who - Show IRC users"
                     ] + (
