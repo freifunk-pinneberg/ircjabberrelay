@@ -71,7 +71,7 @@ class JabberBot(muc.MUCClient):
                     ]
                     if ismoderator else [])).encode('utf-8'))
             else:
-                 msg = "<%s> %s" % (user.nick, msg)
+                msg = "<%s> %s" % (user.nick, msg)
                 try:
                     msg = msg.encode('utf-8')
                 except UnicodeDecodeError:

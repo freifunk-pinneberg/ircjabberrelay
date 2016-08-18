@@ -63,7 +63,7 @@ def initIrcJabberRelay(application):
     manager = RelayManager()
 
     # Configure IRC
-    ircfactory = IrcBotFactory(manager, cfg['ircchannel'], cfg['ircnick'], cfg['ircrealname'], cfg['ircuserinfo'] manager.sendJabber)
+    ircfactory = IrcBotFactory(manager, cfg['ircchannel'], cfg['ircnick'], cfg['ircrealname'], cfg['ircuserinfo'], manager.sendJabber)
     # point = TCP4ClientEndpoint(reactor, 'irc.freenode.net', 6667)
     # d = point.connect(ircfactory)
     # d.addCallback(gotProtocol)

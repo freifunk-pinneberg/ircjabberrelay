@@ -9,8 +9,14 @@ class IrcBot(irc.IRCClient):
     def _get_nickname(self):
         return self.factory.nickname
     nickname = property(_get_nickname)
-    realname = self.factory.realname
-    userinfo = self.factory.userinfo
+
+    def _get_realname(self):
+        return self.factory.realname
+    realname = property(_get_realname)
+
+    def _get_userinfo(self):
+        return self.factory.userinfo
+    userinfo = property(_get_userinfo)
 
     def signedOn(self):
         self.join(self.factory.channel)
