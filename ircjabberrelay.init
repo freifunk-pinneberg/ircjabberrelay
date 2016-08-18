@@ -6,19 +6,16 @@
 # description: Relay between IRC and Jabber
 
 ### BEGIN INIT INFO
-# Provides: 
-# Required-Start: 
-# Required-Stop: 
-# Should-Start: 
-# Should-Stop: 
-# Default-Start: 
-# Default-Stop: 
-# Short-Description: 
-# Description:      
+# Provides:
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Should-Stop:
+# Default-Start:
+# Default-Stop:
+# Short-Description:
+# Description:
 ### END INIT INFO
-
-# Source function library.
-. /etc/rc.d/init.d/functions
 
 exec="/usr/bin/twistd"
 opts="--syslog -y /usr/bin/ircjabberrelay.tac --pidfile=/var/run/ircjabberrelay.pid"
