@@ -43,19 +43,7 @@ class JabberBot(muc.MUCClient):
             #else:
 
             # send to irc only command messages
-            if body.startswith('@toirc1251 '):
-                msg = body.replace('@toirc1251 ', '', 1).rstrip()
-                msg = "JABBER: <%s> %s" % (user.nick, msg)
-                try:
-                    msg = msg.encode('cp1251')
-                except UnicodeDecodeError:
-                    None
-                self.callback(msg)
-            elif body.startswith('@toirc '):
-                msg = "JABBER: <%s> %s" % (user.nick, body.replace('@toirc ', '', 1))
-                msg = msg.rstrip().encode('utf-8')
-                self.callback(msg)
-            elif body.startswith('@who'):
+            if body.startswith('@who'):
                 if self.manager.ircbot is not None:
                     self.manager.ircbot.names().addCallback(self.printOnline)
             elif ismoderator and body.startswith('@ignore '):
@@ -75,15 +63,20 @@ class JabberBot(muc.MUCClient):
                     self.sendMessage("Not ignoring anybody")
             elif body.startswith('@help'):
                 self.sendMessage('\n'.join(
-                    [u"@toirc <сообщение> - послать сообщение в IRC",
-                     u"@toirc1251 <сообщение> - послать сообщение в IRC в кодировке CP1251",
-                     u"@who - выводит список пользователей на IRC канале"
+                    [u"@who - Show IRC users"
                     ] + (
-                    [u"@ignore <ник> - игнорировать пользователя в IRC",
-                     u"@unignore <ник> - отменить игнорирование пользователя в IRC",
-                     u"@ignorelist - вывести список заигноренных пользователей",
+                    [u"@ignore <username> - ignore user from IRC Channel",
+                     u"@unignore <username> - relay messages from user in IRC Channel again",
+                     u"@ignorelist - show users on ignorelist",
                     ]
                     if ismoderator else [])).encode('utf-8'))
+            else:
+                 msg = "<%s> %s" % (user.nick, msg)
+                try:
+                    msg = msg.encode('utf-8')
+                except UnicodeDecodeError:
+                    None
+                self.callback(msg)
 
     def printOnline(self, namelist):
         namelist.sort()
