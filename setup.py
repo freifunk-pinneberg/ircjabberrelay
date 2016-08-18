@@ -6,17 +6,18 @@
 from setuptools import setup
 
 setup(name='ircjabberrelay',
-      version='0.0.1',
+      version='0.0.2',
       description='Relay between IRC and Jabber',
-      author='Alexey Torkhov',
+      author='Alexey Torkhov | Michel Wohlert',
       author_email='atorkhov@gmail.com',
-      maintainer_email='atorkhov@gmail.com',
-      url='https://github.com/atorkhov/ircjabberrelay',
+      maintainer_email='m.wohlert@pinneberg.freifunk.net',
+      url='https://github.com/freifunk-pinneberg/ircjabberrelay',
       license='Public Domain',
       platforms='any',
       packages=['ircjabberrelay'],
       data_files=[
             ('/usr/bin', ['ircjabberrelay.tac']),
-            ('/etc/ircjabberrelay', ['ignore'])
+            ('/etc/ircjabberrelay', ['ignore']),
+            ('/etc/init.d',['ircjabberrelay.init'])
       ]
 )
