@@ -38,12 +38,12 @@ class IrcBot(irc.IRCClient):
         # Check to see if they're sending me a private message
         if channel == self.nickname:
             return
-        pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)")
+        pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)",re.IGNORECASE)
         if pattern.search(msg.rstrip())is not None:
-            msg = "<%s> %s" % (re.search(pattern, msg, re.IGNORECASE).group(1),re.search(pattern, msg, re.IGNORECASE).group(2))
+            msg = "<%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2))
 
         log.msg("irc msg = %s" % (msg))
-        log.msg("irc regexed = %2" % ("<%s> %s" % (re.search(pattern, msg, re.IGNORECASE).group(1),re.search(pattern, msg, re.IGNORECASE).group(2))))
+        log.msg("irc regexed = %2" % ("<%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2))))
         if self.isUtf8(msg):
             if msg.startswith('@who'):
                 self.factory.manager.jabberbot.getXMPPUsers().addCallback(self.printOnline)
