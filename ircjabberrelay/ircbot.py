@@ -30,6 +30,7 @@ class IrcBot(irc.IRCClient):
     def privmsg(self, user, channel, msg):
         """This will get called when the bot receives a message."""
         user = user.split('!', 1)[0]
+        message = msg
 
         # Check ignore list
         if user in self.factory.manager.ignoreList:
@@ -38,15 +39,15 @@ class IrcBot(irc.IRCClient):
         # Check to see if they're sending me a private message
         if channel == self.nickname:
             return
-        pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)",re.IGNORECASE)
+
+        pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)", re.IGNORECASE)
         if pattern.search(msg.rstrip()) is not None:
-            msg = "<%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2))
-            log.msg("fixed message <%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2)))
+            message = "<%s>%s" % (re.search(pattern, msg).group(1), re.search(pattern, msg).group(2))
 
+        log.msg("irc msg = %s" % message)
 
-        log.msg("irc msg = %s" % msg)
         if self.isUtf8(msg):
-            if msg.startswith('@who'):
+            if message.startswith('@who'):
                 self.factory.manager.jabberbot.getXMPPUsers().addCallback(self.printOnline)
             else:
                 self.factory.callback("<%s> %s" % (user, msg.rstrip()))
