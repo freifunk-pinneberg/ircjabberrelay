@@ -30,12 +30,6 @@ class JabberBot(muc.MUCClient):
         """Configure the room if we just created it.
         """
 
-        if int(room.status) == muc.STATUS_CODE_CREATED:
-            config_form = yield self.getConfigureForm(self.room_jid.userhost())
-
-            # set config default
-            config_result = yield self.configure(self.room_jid.userhost())
-
     def receivedGroupChat(self, room, user, message):
         ismoderator = (user.role == 'moderator')
         if not user.nick.startswith(self.nick):

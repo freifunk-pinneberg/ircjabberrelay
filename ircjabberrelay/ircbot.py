@@ -39,10 +39,12 @@ class IrcBot(irc.IRCClient):
         if channel == self.nickname:
             return
         pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)",re.IGNORECASE)
-        if pattern.search(msg.rstrip())is not None:
+        if pattern.search(msg.rstrip()) is not None:
             msg = "<%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2))
+            log.msg("fixed message <%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2)))
 
-        log.msg("irc msg = %s" % (msg))
+
+        log.msg("irc msg = %s" % msg)
         if self.isUtf8(msg):
             if msg.startswith('@who'):
                 self.factory.manager.jabberbot.getXMPPUsers().addCallback(self.printOnline)
