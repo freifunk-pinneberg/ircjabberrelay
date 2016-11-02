@@ -1,6 +1,7 @@
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, defer
 from twisted.python import log
+import re
 
 class IrcBot(irc.IRCClient):
     def __init__(self):
@@ -29,6 +30,7 @@ class IrcBot(irc.IRCClient):
     def privmsg(self, user, channel, msg):
         """This will get called when the bot receives a message."""
         user = user.split('!', 1)[0]
+        
 
         # Check ignore list
         if user in self.factory.manager.ignoreList:
@@ -37,7 +39,11 @@ class IrcBot(irc.IRCClient):
         # Check to see if they're sending me a private message
         if channel == self.nickname:
             return
+        pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)")
+        if pattern.match(msg.rstrip()):
+            msg = "<%s> %s" % (re.search(msg, pattern, re.IGNORECASE).group(1),re.search(msg, pattern, re.IGNORECASE).group(2))
 
+        log.msg("irc msg = %s" % (msg))
         if self.isUtf8(msg):
             if msg.startswith('@who'):
                 self.factory.manager.jabberbot.getXMPPUsers().addCallback(self.printOnline)
