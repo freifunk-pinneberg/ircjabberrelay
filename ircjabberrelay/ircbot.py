@@ -41,7 +41,7 @@ class IrcBot(irc.IRCClient):
             return
         pattern = re.compile("<#\d{5}#\d{3}#\d{3}([^#]*)#\d{3}>(.*)")
         if pattern.match(msg.rstrip()):
-            msg = "<%s> %s" % (re.search(msg, pattern, re.IGNORECASE).group(1),re.search(msg, pattern, re.IGNORECASE).group(2))
+            msg = "<%s> %s" % (re.search(pattern, msg, re.IGNORECASE).group(1),re.search(pattern, msg, re.IGNORECASE).group(2))
 
         log.msg("irc msg = %s" % (msg))
         if self.isUtf8(msg):
@@ -111,7 +111,7 @@ class IrcBot(irc.IRCClient):
     def printOnline(self, namelist):
             namelist.sort()
             msg = ' '.join(namelist)
-            sendMessage(msg.decode('utf-8'))
+            self.sendMessage(msg.decode('utf-8'))
 
 class IrcBotFactory(protocol.ClientFactory):
     protocol = IrcBot

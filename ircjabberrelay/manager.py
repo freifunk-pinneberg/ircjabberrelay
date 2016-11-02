@@ -11,6 +11,10 @@ from ircbot import *
 from jabberbot import *
 from config import *
 
+from ircjabberrelay.ircbot import IrcBotFactory
+from ircjabberrelay.jabberbot import JabberBot
+
+
 class RelayManager:
     def __init__(self):
         self.ircbot = None
