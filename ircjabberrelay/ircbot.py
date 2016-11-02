@@ -43,7 +43,6 @@ class IrcBot(irc.IRCClient):
             msg = "<%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2))
 
         log.msg("irc msg = %s" % (msg))
-        log.msg("irc regexed = %2" % ("<%s> %s" % (re.search(pattern, msg).group(1),re.search(pattern, msg).group(2))))
         if self.isUtf8(msg):
             if msg.startswith('@who'):
                 self.factory.manager.jabberbot.getXMPPUsers().addCallback(self.printOnline)
